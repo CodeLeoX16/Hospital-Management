@@ -49,20 +49,22 @@ HospitalManagementSystem/
 ## 📖 How to Use
 
 **- 1.Clone the repository:**
+    
+    git clone https://github.com/your-username/hospital-management-system.git
 
-   git clone https://github.com/your-username/hospital-management-system.git
 
-- 2.Navigate to the project directory:
 
-   cd hospital-management-system
+**- 2.Navigate to the project directory:**
 
-- 3.Compile the code using a C++ compiler:
+    cd hospital-management-system
 
-   g++ main.cpp -o hospital_management
+**- 3.Compile the code using a C++ compiler:**
 
-- 4.Run the program:
+    g++ main.cpp -o hospital_management
 
-   ./hospital_management
+**- 4.Run the program:**
+
+    ./hospital_management
 
 - 5.Follow the menu prompts to:
    
@@ -90,6 +92,23 @@ HospitalManagementSystem/
 
 Contributions are welcome! Follow these steps to contribute:
 
+  **1.Fork the repository.**
+  
+  **2.Create a new branch:**
+  
+    git checkout -b feature-name
+    
+  **3.Make your changes and commit them:**
+
+    git commit -m "Description of changes"
+  
+  **4.Push to your forked repository:**
+  
+     git push origin feature-name
+     
+**5.Open a pull request on the original repository.**
+
+
 
 ------------------------------------------------------------------------------------------------
 
@@ -101,6 +120,6 @@ This project is licensed under the MIT License.
 
 ## 💻 Author  
 
-**Your Name**  
+**Somnath Bhunia**  
 - [GitHub](https://github.com/CodeLeoX16)  
 - [LinkedIn](https://www.linkedin.com/in/somnath-bhunia-3b300b328/)  
