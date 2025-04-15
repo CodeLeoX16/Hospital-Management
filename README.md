@@ -1,17 +1,112 @@
-# Hospital-Management
+# 🏥 Hospital Management System
 
-1.This project is a basic console-based application that simulates the operations of a healthcare management system. The application allows users to perform several key functions:
+A console-based Hospital Management System built in C++ to manage patients, doctors, and appointments efficiently. This project demonstrates the use of object-oriented programming principles to create a modular and interactive system. 
 
-2.Add Patients: Collect and store patient details, such as name, gender, age, address, phone number, and email.
+------------------------------------------------------------------------------------------------
 
-3.Add Doctors: Collect and store doctor details, including name, address, phone number, email, and specialty.
+## 🚀 Features
+ * ### Add Patients:
 
-4.Schedule Appointments: Schedule appointments by associating patients with doctors, and specifying the date and time of the appointment.
+  - Collect and store patient details such as name, gender, age, address, phone number, and email.
+    
+### * Add Doctors:
 
-5.View Patients: Display a list of all registered patients along with their details.
+- Collect and store doctor details such as name, address, phone number, email, and specialty.
+  
+### * Schedule Appointments:
 
-6.View Doctors: Display a list of all registered doctors along with their details.
+- Link patients and doctors by scheduling appointments with date and time.
+  
+### * View Details:
 
-7.View Appointments: Display a list of all scheduled appointments along with patient and doctor details, as well as the date and time of the appointment.
+- View all registered patients, doctors, and scheduled appointments.
+  
+### * Interactive Menu:
 
-The application uses simple data structures like vectors to store and manage patient, doctor, and appointment data. It provides a menu-driven interface for users to interact with the system and perform various tasks. The system ensures that each patient, doctor, and appointment has a unique ID for easy identification and management.
+- User-friendly menu-driven interface for seamless interaction.
+-------------------------------------------------------------------------------------------------
+## 🛠️ Technologies Used
+
+* C++: For implementing the system logic and structure.
+  
+*  Standard Template Library (STL):   Used std::vector for dynamic data storage.
+-------------------------------------------------------------------------------------------------
+## 📂 Project Structure
+
+HospitalManagementSystem/
+│
+├── main.cpp          # Main source code file
+
+-------------------------------------------------------------------------------------------------
+
+## 📖 How to Use
+
+1. Clone the repository:
+
+   git clone https://github.com/your-username/hospital-management-system.git
+
+2. Navigate to the project directory:
+
+cd hospital-management-system
+
+3. Compile the code using a C++ compiler:
+
+   g++ main.cpp -o hospital_management
+
+4. Run the program:
+
+   ./hospital_management
+
+5. Follow the menu prompts to:
+   
+- Add patients and doctors.
+  
+- Schedule appointments.
+  
+- View details of patients, doctors, and appointments.
+-------------------------------------------------------------------------------------------------
+
+## 🌟 Future Enhancements
+
+* Add input validation to ensure correct data entry.
+  
+* Implement a database for persistent data storage.
+  
+* Add search functionality for patients and doctors.
+
+* Enhance the UI with a graphical interface.
+
+-------------------------------------------------------------------------------------------------
+## 🤝 Contributing
+
+Contributions are welcome! Follow these steps to contribute:
+
+1.Fork the repository.
+   
+2.Create a new branch:
+
+git checkout -b feature-name
+
+3.Make your changes and commit them:
+
+git commit -m "Description of changes"
+
+4.Push to your forked repository:
+
+git push origin feature-name
+
+5.Open a pull request on the original repository.
+
+------------------------------------------------------------------------------------------------
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+------------------------------------------------------------------------------------------------
+
+## 💻 Author  
+
+**Your Name**  
+- [GitHub](https://github.com/CodeLeoX16)  
+- [LinkedIn](https://www.linkedin.com/in/somnath-bhunia-3b300b328/)  
