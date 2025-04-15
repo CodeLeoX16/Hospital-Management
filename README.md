@@ -34,37 +34,40 @@ A console-based Hospital Management System built in C++ to manage patients, doct
 ## 📂 Project Structure
 
 HospitalManagementSystem/
+
 │
+
 ├── main.cpp          # Main source code file
 
--------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
 
 ## 📖 How to Use
 
-1. Clone the repository:
+- 1. Clone the repository:
 
    git clone https://github.com/your-username/hospital-management-system.git
 
-2. Navigate to the project directory:
+- 2. Navigate to the project directory:
 
-cd hospital-management-system
+   cd hospital-management-system
 
-3. Compile the code using a C++ compiler:
+- 3. Compile the code using a C++ compiler:
 
    g++ main.cpp -o hospital_management
 
-4. Run the program:
+- 4. Run the program:
 
    ./hospital_management
 
-5. Follow the menu prompts to:
+- 5. Follow the menu prompts to:
    
-- Add patients and doctors.
+  * Add patients and doctors.
   
-- Schedule appointments.
+  * Schedule appointments.
   
-- View details of patients, doctors, and appointments.
--------------------------------------------------------------------------------------------------
+  * View details of patients, doctors, and appointments.
+    
+------------------------------------------------------------------------------------------------
 
 ## 🌟 Future Enhancements
 
