@@ -5,32 +5,37 @@ A console-based Hospital Management System built in C++ to manage patients, doct
 ------------------------------------------------------------------------------------------------
 
 ## 🚀 Features
- * ### Add Patients:
+
+### Add Patients:
 
   - Collect and store patient details such as name, gender, age, address, phone number, and email.
     
-### * Add Doctors:
+###  Add Doctors:
 
 - Collect and store doctor details such as name, address, phone number, email, and specialty.
   
-### * Schedule Appointments:
+###  Schedule Appointments:
 
 - Link patients and doctors by scheduling appointments with date and time.
   
-### * View Details:
+###  View Details:
 
 - View all registered patients, doctors, and scheduled appointments.
   
-### * Interactive Menu:
+###  Interactive Menu:
 
 - User-friendly menu-driven interface for seamless interaction.
--------------------------------------------------------------------------------------------------
+  
+------------------------------------------------------------------------------------------------
+
 ## 🛠️ Technologies Used
 
 * C++: For implementing the system logic and structure.
   
 *  Standard Template Library (STL):   Used std::vector for dynamic data storage.
--------------------------------------------------------------------------------------------------
+  
+------------------------------------------------------------------------------------------------
+
 ## 📂 Project Structure
 
 HospitalManagementSystem/
@@ -43,23 +48,23 @@ HospitalManagementSystem/
 
 ## 📖 How to Use
 
-- 1. Clone the repository:
+- 1.Clone the repository:
 
    git clone https://github.com/your-username/hospital-management-system.git
 
-- 2. Navigate to the project directory:
+- 2.Navigate to the project directory:
 
    cd hospital-management-system
 
-- 3. Compile the code using a C++ compiler:
+- 3.Compile the code using a C++ compiler:
 
    g++ main.cpp -o hospital_management
 
-- 4. Run the program:
+- 4.Run the program:
 
    ./hospital_management
 
-- 5. Follow the menu prompts to:
+- 5.Follow the menu prompts to:
    
   * Add patients and doctors.
   
@@ -79,26 +84,12 @@ HospitalManagementSystem/
 
 * Enhance the UI with a graphical interface.
 
--------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
 ## 🤝 Contributing
 
 Contributions are welcome! Follow these steps to contribute:
 
-1.Fork the repository.
-   
-2.Create a new branch:
-
-git checkout -b feature-name
-
-3.Make your changes and commit them:
-
-git commit -m "Description of changes"
-
-4.Push to your forked repository:
-
-git push origin feature-name
-
-5.Open a pull request on the original repository.
 
 ------------------------------------------------------------------------------------------------
 
