@@ -48,25 +48,25 @@ HospitalManagementSystem/
 
 ## 📖 How to Use
 
-**- 1.Clone the repository:**
+** 1.Clone the repository:**
     
     git clone https://github.com/your-username/hospital-management-system.git
 
 
 
-**- 2.Navigate to the project directory:**
+** 2.Navigate to the project directory:**
 
     cd hospital-management-system
 
-**- 3.Compile the code using a C++ compiler:**
+** 3.Compile the code using a C++ compiler:**
 
     g++ main.cpp -o hospital_management
 
-**- 4.Run the program:**
+** 4.Run the program:**
 
     ./hospital_management
 
-- 5.Follow the menu prompts to:
+** 5.Follow the menu prompts to:**
    
   * Add patients and doctors.
   
