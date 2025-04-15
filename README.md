@@ -48,7 +48,7 @@ HospitalManagementSystem/
 
 ## 📖 How to Use
 
-- 1.Clone the repository:
+**- 1.Clone the repository:**
 
    git clone https://github.com/your-username/hospital-management-system.git
 
