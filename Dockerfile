@@ -1,22 +1,17 @@
+# Use an official GCC image as the base
 FROM gcc:latest
 
+# Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies including jsoncpp library
-RUN apt-get update && apt-get install -y \
-    g++ \
-    make \
-    libjsoncpp-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy all source files
+# Copy the source code into the container
 COPY . .
 
-# Compile the C++ server with jsoncpp
-RUN g++ -o server server.cpp -ljsoncpp -lpthread -std=c++11
+# Compile the C++ program (server_linux.cpp)
+RUN g++ -o server server_linux.cpp
 
-# Expose port (Render will provide PORT env variable)
+# Expose the port the server will run on (if applicable)
 EXPOSE 8080
 
-# Run the server
+# Command to run the server
 CMD ["./server"]
