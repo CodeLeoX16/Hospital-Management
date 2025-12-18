@@ -1,425 +1,430 @@
-// API Configuration
+// Configuration
 const API_BASE_URL = 'https://hospital-management2.onrender.com/api';
+let recentActivities = [];
+let allPatients = [];
+let allDoctors = [];
+let allAppointments = [];
 
-// State management
-let patients = [];
-let doctors = [];
-let appointments = [];
-
-// Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-    initializeTabs();
-    initializeForms();
-    loadAllData();
-    updateDashboard();
+// Tab switching
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabName = this.getAttribute('data-tab');
+        switchTab(tabName);
+    });
 });
 
-// Tab Switching Functionality
-function initializeTabs() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const tabName = button.dataset.tab;
-
-            // Remove active class from all buttons and contents
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-
-            // Add active class to clicked button and corresponding content
-            button.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
-        });
+function switchTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
     });
-}
-
-// Form Initialization and Event Listeners
-function initializeForms() {
-    // Patient Form
-    const patientForm = document.getElementById('patientForm');
-    if (patientForm) {
-        patientForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await handlePatientSubmit(e);
-        });
-    }
-
-    // Doctor Form
-    const doctorForm = document.getElementById('doctorForm');
-    if (doctorForm) {
-        doctorForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await handleDoctorSubmit(e);
-        });
-    }
-
-    // Appointment Form
-    const appointmentForm = document.getElementById('appointmentForm');
-    if (appointmentForm) {
-        appointmentForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await handleAppointmentSubmit(e);
-        });
+    
+    // Remove active class from all buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+    
+    // Load data when switching to tabs
+    if (tabName === 'patients') {
+        loadPatients();
+    } else if (tabName === 'doctors') {
+        loadDoctors();
+    } else if (tabName === 'appointments') {
+        loadAppointments();
+        loadPatientDropdown();
+        loadDoctorDropdown();
+    } else if (tabName === 'dashboard') {
+        updateDashboard();
     }
 }
 
-// Load All Data
-async function loadAllData() {
-    await Promise.all([
-        loadPatients(),
-        loadDoctors(),
-        loadAppointments()
-    ]);
-    updateDashboard();
-}
-
-// Patient Management
-async function loadPatients() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/patients`);
-        if (response.ok) {
-            patients = await response.json();
-            renderPatients();
-            updatePatientSelect();
-        } else {
-            showNotification('Failed to load patients', 'error');
-        }
-    } catch (error) {
-        console.error('Error loading patients:', error);
-        showNotification('Error loading patients', 'error');
-    }
-}
-
-async function handlePatientSubmit(e) {
-    const formData = new FormData(e.target);
+// Form submissions
+document.getElementById('patientForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
     const patientData = {
-        name: formData.get('patientName'),
-        age: parseInt(formData.get('patientAge')),
-        gender: formData.get('patientGender'),
-        contact: formData.get('patientContact'),
-        address: formData.get('patientAddress')
+        name: document.getElementById('patientName').value,
+        gender: document.getElementById('patientGender').value,
+        age: parseInt(document.getElementById('patientAge').value),
+        address: document.getElementById('patientAddress').value,
+        phone: document.getElementById('patientPhone').value,
+        email: document.getElementById('patientEmail').value
     };
-
+    
+    console.log('Sending patient data:', patientData);
+    
     try {
-        const response = await fetch(`${API_BASE_URL}/patients`, {
+        const response = await fetch(`${API_BASE_URL}/patient`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(patientData)
         });
-
-        if (response.ok) {
-            showNotification('Patient added successfully', 'success');
-            e.target.reset();
-            await loadPatients();
-            updateDashboard();
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Patient added successfully!', 'success');
+            document.getElementById('patientForm').reset();
+            loadPatients();
+            addActivity(`Added new patient: ${patientData.name}`);
         } else {
-            const error = await response.json();
-            showNotification(error.message || 'Failed to add patient', 'error');
+            showNotification('Error adding patient: ' + result.message, 'error');
         }
     } catch (error) {
-        console.error('Error adding patient:', error);
-        showNotification('Error adding patient', 'error');
+        console.error('Error:', error);
+        showNotification('Failed to add patient: ' + error.message, 'error');
     }
-}
+});
 
-function renderPatients() {
-    const patientList = document.getElementById('patientList');
-    if (!patientList) return;
-
-    if (patients.length === 0) {
-        patientList.innerHTML = '<p class="no-data">No patients found</p>';
-        return;
-    }
-
-    patientList.innerHTML = patients.map(patient => `
-        <div class="card">
-            <h3>${patient.name}</h3>
-            <p><strong>Age:</strong> ${patient.age}</p>
-            <p><strong>Gender:</strong> ${patient.gender}</p>
-            <p><strong>Contact:</strong> ${patient.contact}</p>
-            <p><strong>Address:</strong> ${patient.address}</p>
-            <button class="btn btn-danger" onclick="deletePatient('${patient._id}')">Delete</button>
-        </div>
-    `).join('');
-}
-
-async function deletePatient(id) {
-    if (!confirm('Are you sure you want to delete this patient?')) return;
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/patients/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok) {
-            showNotification('Patient deleted successfully', 'success');
-            await loadPatients();
-            updateDashboard();
-        } else {
-            showNotification('Failed to delete patient', 'error');
-        }
-    } catch (error) {
-        console.error('Error deleting patient:', error);
-        showNotification('Error deleting patient', 'error');
-    }
-}
-
-function updatePatientSelect() {
-    const patientSelect = document.getElementById('appointmentPatient');
-    if (!patientSelect) return;
-
-    patientSelect.innerHTML = '<option value="">Select Patient</option>' +
-        patients.map(patient => `
-            <option value="${patient._id}">${patient.name}</option>
-        `).join('');
-}
-
-// Doctor Management
-async function loadDoctors() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/doctors`);
-        if (response.ok) {
-            doctors = await response.json();
-            renderDoctors();
-            updateDoctorSelect();
-        } else {
-            showNotification('Failed to load doctors', 'error');
-        }
-    } catch (error) {
-        console.error('Error loading doctors:', error);
-        showNotification('Error loading doctors', 'error');
-    }
-}
-
-async function handleDoctorSubmit(e) {
-    const formData = new FormData(e.target);
+document.getElementById('doctorForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
     const doctorData = {
-        name: formData.get('doctorName'),
-        specialization: formData.get('doctorSpecialization'),
-        contact: formData.get('doctorContact'),
-        email: formData.get('doctorEmail')
+        name: document.getElementById('doctorName').value,
+        speciality: document.getElementById('doctorSpeciality').value,
+        address: document.getElementById('doctorAddress').value,
+        phone: document.getElementById('doctorPhone').value,
+        email: document.getElementById('doctorEmail').value
     };
-
+    
     try {
-        const response = await fetch(`${API_BASE_URL}/doctors`, {
+        const response = await fetch(`${API_BASE_URL}/doctor`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(doctorData)
         });
-
-        if (response.ok) {
-            showNotification('Doctor added successfully', 'success');
-            e.target.reset();
-            await loadDoctors();
-            updateDashboard();
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Doctor added successfully!', 'success');
+            document.getElementById('doctorForm').reset();
+            loadDoctors();
+            addActivity(`Added new doctor: ${doctorData.name}`);
         } else {
-            const error = await response.json();
-            showNotification(error.message || 'Failed to add doctor', 'error');
+            showNotification('Error adding doctor: ' + result.message, 'error');
         }
     } catch (error) {
-        console.error('Error adding doctor:', error);
-        showNotification('Error adding doctor', 'error');
+        console.error('Error:', error);
+        showNotification('Failed to add doctor', 'error');
     }
-}
+});
 
-function renderDoctors() {
-    const doctorList = document.getElementById('doctorList');
-    if (!doctorList) return;
-
-    if (doctors.length === 0) {
-        doctorList.innerHTML = '<p class="no-data">No doctors found</p>';
-        return;
-    }
-
-    doctorList.innerHTML = doctors.map(doctor => `
-        <div class="card">
-            <h3>${doctor.name}</h3>
-            <p><strong>Specialization:</strong> ${doctor.specialization}</p>
-            <p><strong>Contact:</strong> ${doctor.contact}</p>
-            <p><strong>Email:</strong> ${doctor.email}</p>
-            <button class="btn btn-danger" onclick="deleteDoctor('${doctor._id}')">Delete</button>
-        </div>
-    `).join('');
-}
-
-async function deleteDoctor(id) {
-    if (!confirm('Are you sure you want to delete this doctor?')) return;
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/doctors/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok) {
-            showNotification('Doctor deleted successfully', 'success');
-            await loadDoctors();
-            updateDashboard();
-        } else {
-            showNotification('Failed to delete doctor', 'error');
-        }
-    } catch (error) {
-        console.error('Error deleting doctor:', error);
-        showNotification('Error deleting doctor', 'error');
-    }
-}
-
-function updateDoctorSelect() {
-    const doctorSelect = document.getElementById('appointmentDoctor');
-    if (!doctorSelect) return;
-
-    doctorSelect.innerHTML = '<option value="">Select Doctor</option>' +
-        doctors.map(doctor => `
-            <option value="${doctor._id}">${doctor.name} - ${doctor.specialization}</option>
-        `).join('');
-}
-
-// Appointment Management
-async function loadAppointments() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/appointments`);
-        if (response.ok) {
-            appointments = await response.json();
-            renderAppointments();
-        } else {
-            showNotification('Failed to load appointments', 'error');
-        }
-    } catch (error) {
-        console.error('Error loading appointments:', error);
-        showNotification('Error loading appointments', 'error');
-    }
-}
-
-async function handleAppointmentSubmit(e) {
-    const formData = new FormData(e.target);
+document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
     const appointmentData = {
-        patientId: formData.get('appointmentPatient'),
-        doctorId: formData.get('appointmentDoctor'),
-        date: formData.get('appointmentDate'),
-        time: formData.get('appointmentTime'),
-        reason: formData.get('appointmentReason')
+        patientId: parseInt(document.getElementById('appointmentPatient').value),
+        doctorId: parseInt(document.getElementById('appointmentDoctor').value),
+        date: document.getElementById('appointmentDate').value,
+        time: document.getElementById('appointmentTime').value
     };
-
+    
     try {
-        const response = await fetch(`${API_BASE_URL}/appointments`, {
+        const response = await fetch(`${API_BASE_URL}/appointment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(appointmentData)
         });
-
-        if (response.ok) {
-            showNotification('Appointment created successfully', 'success');
-            e.target.reset();
-            await loadAppointments();
-            updateDashboard();
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('Appointment scheduled successfully!', 'success');
+            document.getElementById('appointmentForm').reset();
+            loadAppointments();
+            addActivity('Scheduled new appointment');
         } else {
-            const error = await response.json();
-            showNotification(error.message || 'Failed to create appointment', 'error');
+            showNotification('Error scheduling appointment: ' + result.message, 'error');
         }
     } catch (error) {
-        console.error('Error creating appointment:', error);
-        showNotification('Error creating appointment', 'error');
+        console.error('Error:', error);
+        showNotification('Failed to schedule appointment', 'error');
+    }
+});
+
+// Load data functions
+async function loadPatients() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/patients`);
+        const result = await response.json();
+        
+        if (result.success) {
+            allPatients = result.data;
+            renderPatients(result.data);
+        }
+    } catch (error) {
+        console.error('Error loading patients:', error);
+        document.getElementById('patientList').innerHTML = '<p class="empty-state">Failed to load patients</p>';
     }
 }
 
-function renderAppointments() {
-    const appointmentList = document.getElementById('appointmentList');
-    if (!appointmentList) return;
+async function loadDoctors() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/doctors`);
+        const result = await response.json();
+        
+        if (result.success) {
+            allDoctors = result.data;
+            renderDoctors(result.data);
+        }
+    } catch (error) {
+        console.error('Error loading doctors:', error);
+        document.getElementById('doctorList').innerHTML = '<p class="empty-state">Failed to load doctors</p>';
+    }
+}
 
-    if (appointments.length === 0) {
-        appointmentList.innerHTML = '<p class="no-data">No appointments found</p>';
+async function loadAppointments() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/appointments`);
+        const result = await response.json();
+        
+        if (result.success) {
+            allAppointments = result.data;
+            renderAppointments(result.data);
+        }
+    } catch (error) {
+        console.error('Error loading appointments:', error);
+        document.getElementById('appointmentList').innerHTML = '<p class="empty-state">Failed to load appointments</p>';
+    }
+}
+
+async function loadPatientDropdown() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/patients`);
+        const result = await response.json();
+        
+        if (result.success && result.data.length > 0) {
+            const select = document.getElementById('appointmentPatient');
+            select.innerHTML = '<option value="">Select Patient</option>';
+            result.data.forEach(patient => {
+                const option = document.createElement('option');
+                option.value = patient.id;
+                option.textContent = `${patient.name} (ID: ${patient.id})`;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading patient dropdown:', error);
+    }
+}
+
+async function loadDoctorDropdown() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/doctors`);
+        const result = await response.json();
+        
+        if (result.success && result.data.length > 0) {
+            const select = document.getElementById('appointmentDoctor');
+            select.innerHTML = '<option value="">Select Doctor</option>';
+            result.data.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.id;
+                option.textContent = `${doctor.name} - ${doctor.speciality} (ID: ${doctor.id})`;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading doctor dropdown:', error);
+    }
+}
+
+// Render functions
+function renderPatients(patients) {
+    const container = document.getElementById('patientList');
+    
+    if (patients.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No patients found</p></div>';
         return;
     }
-
-    appointmentList.innerHTML = appointments.map(appointment => {
-        const patient = patients.find(p => p._id === appointment.patientId);
-        const doctor = doctors.find(d => d._id === appointment.doctorId);
-        const date = new Date(appointment.date).toLocaleDateString();
-
-        return `
-            <div class="card">
-                <h3>Appointment</h3>
-                <p><strong>Patient:</strong> ${patient ? patient.name : 'Unknown'}</p>
-                <p><strong>Doctor:</strong> ${doctor ? doctor.name : 'Unknown'}</p>
-                <p><strong>Date:</strong> ${date}</p>
-                <p><strong>Time:</strong> ${appointment.time}</p>
-                <p><strong>Reason:</strong> ${appointment.reason}</p>
-                <p><strong>Status:</strong> <span class="status-${appointment.status}">${appointment.status}</span></p>
-                <button class="btn btn-danger" onclick="deleteAppointment('${appointment._id}')">Delete</button>
+    
+    container.innerHTML = patients.map(patient => `
+        <div class="data-card">
+            <div class="card-header">
+                <div class="card-title">${patient.name}</div>
+                <div class="card-id">ID: ${patient.id}</div>
             </div>
-        `;
-    }).join('');
+            <div class="card-content">
+                <div class="info-row">
+                    <span class="info-label">Gender:</span>
+                    <span class="info-value">${patient.gender}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Age:</span>
+                    <span class="info-value">${patient.age} years</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Address:</span>
+                    <span class="info-value">${patient.address}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value">${patient.phone}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">${patient.email}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
-async function deleteAppointment(id) {
-    if (!confirm('Are you sure you want to delete this appointment?')) return;
+function renderDoctors(doctors) {
+    const container = document.getElementById('doctorList');
+    
+    if (doctors.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No doctors found</p></div>';
+        return;
+    }
+    
+    container.innerHTML = doctors.map(doctor => `
+        <div class="data-card">
+            <div class="card-header">
+                <div class="card-title">${doctor.name}</div>
+                <div class="card-id">ID: ${doctor.id}</div>
+            </div>
+            <div class="card-content">
+                <div class="info-row">
+                    <span class="info-label">Speciality:</span>
+                    <span class="info-value">${doctor.speciality}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Address:</span>
+                    <span class="info-value">${doctor.address}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value">${doctor.phone}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">${doctor.email}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
 
+function renderAppointments(appointments) {
+    const container = document.getElementById('appointmentList');
+    
+    if (appointments.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No appointments found</p></div>';
+        return;
+    }
+    
+    container.innerHTML = appointments.map(appointment => `
+        <div class="data-card">
+            <div class="card-header">
+                <div class="card-title">Appointment #${appointment.id}</div>
+            </div>
+            <div class="card-content">
+                <div class="info-row">
+                    <span class="info-label">Patient:</span>
+                    <span class="info-value">${appointment.patientName}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Doctor:</span>
+                    <span class="info-value">${appointment.doctorName}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Date:</span>
+                    <span class="info-value">${appointment.date}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Time:</span>
+                    <span class="info-value">${appointment.time}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Dashboard update
+async function updateDashboard() {
     try {
-        const response = await fetch(`${API_BASE_URL}/appointments/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok) {
-            showNotification('Appointment deleted successfully', 'success');
-            await loadAppointments();
-            updateDashboard();
-        } else {
-            showNotification('Failed to delete appointment', 'error');
-        }
+        const [patientsRes, doctorsRes, appointmentsRes] = await Promise.all([
+            fetch(`${API_BASE_URL}/patients`),
+            fetch(`${API_BASE_URL}/doctors`),
+            fetch(`${API_BASE_URL}/appointments`)
+        ]);
+        
+        const patients = await patientsRes.json();
+        const doctors = await doctorsRes.json();
+        const appointments = await appointmentsRes.json();
+        
+        document.getElementById('patientCount').textContent = patients.data?.length || 0;
+        document.getElementById('doctorCount').textContent = doctors.data?.length || 0;
+        document.getElementById('appointmentCount').textContent = appointments.data?.length || 0;
+        
+        renderRecentActivity();
     } catch (error) {
-        console.error('Error deleting appointment:', error);
-        showNotification('Error deleting appointment', 'error');
+        console.error('Error updating dashboard:', error);
     }
 }
 
-// Dashboard Update
-function updateDashboard() {
-    const totalPatientsEl = document.getElementById('totalPatients');
-    const totalDoctorsEl = document.getElementById('totalDoctors');
-    const totalAppointmentsEl = document.getElementById('totalAppointments');
-
-    if (totalPatientsEl) totalPatientsEl.textContent = patients.length;
-    if (totalDoctorsEl) totalDoctorsEl.textContent = doctors.length;
-    if (totalAppointmentsEl) totalAppointmentsEl.textContent = appointments.length;
+function renderRecentActivity() {
+    const container = document.getElementById('recentActivity');
+    
+    if (recentActivities.length === 0) {
+        container.innerHTML = '<p class="empty-state">No recent activity</p>';
+        return;
+    }
+    
+    container.innerHTML = recentActivities.slice(-5).reverse().map(activity => `
+        <div class="activity-item">📋 ${activity}</div>
+    `).join('');
 }
 
-// Notification System
+function addActivity(message) {
+    const timestamp = new Date().toLocaleTimeString();
+    recentActivities.push(`${message} - ${timestamp}`);
+    if (recentActivities.length > 20) {
+        recentActivities.shift();
+    }
+}
+
+// Notification system
 function showNotification(message, type = 'info') {
-    // Remove any existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
+    const notification = document.getElementById('notification');
     notification.textContent = message;
-
-    // Add to document
-    document.body.appendChild(notification);
-
-    // Trigger animation
+    notification.className = `notification show ${type}`;
+    
     setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.classList.remove('show');
+        notification.classList.add('hide');
         setTimeout(() => {
-            notification.remove();
+            notification.classList.remove('show', 'hide');
         }, 300);
     }, 3000);
 }
 
-// Make delete functions globally accessible
-window.deletePatient = deletePatient;
-window.deleteDoctor = deleteDoctor;
-window.deleteAppointment = deleteAppointment;
+// Initialize on page load
+window.addEventListener('load', () => {
+    updateDashboard();
+    showNotification('Welcome to Hospital Management System!', 'info');
+    addActivity('System started');
+});
+
+// Auto-refresh data every 30 seconds
+setInterval(() => {
+    if (document.getElementById('patients').classList.contains('active')) {
+        loadPatients();
+    } else if (document.getElementById('doctors').classList.contains('active')) {
+        loadDoctors();
+    } else if (document.getElementById('appointments').classList.contains('active')) {
+        loadAppointments();
+    }
+}, 30000);
