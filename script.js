@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'https://hospital-management2.onrender.com/api';
+const API_BASE_URL = 'https://hospital-mgmt-system-backend.onrender.com';
 let recentActivities = [];
 let allPatients = [];
 let allDoctors = [];
