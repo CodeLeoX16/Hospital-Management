@@ -225,6 +225,7 @@ string handleGetAppointments() {
 }
 
 // Process HTTP request
+// Process HTTP request
 string processRequest(string request) {
     std::cout << "======== RAW REQUEST START ========" << std::endl;
     std::cout << request << std::endl;
@@ -238,13 +239,22 @@ string processRequest(string request) {
     }
 
     // Route requests
-    if (request.find("POST /api/patient") != string::npos) {
+    if (
+        request.find("POST /api/patient") != string::npos ||
+        request.find("POST /Hospital-Management/api/patient") != string::npos
+    ) {
         return buildHTTPResponse(handleAddPatient(body));
     }
-    else if (request.find("POST /api/doctor") != string::npos) {
+    else if (
+        request.find("POST /api/doctor") != string::npos ||
+        request.find("POST /Hospital-Management/api/doctor") != string::npos
+    ) {
         return buildHTTPResponse(handleAddDoctor(body));
     }
-    else if (request.find("POST /api/appointment") != string::npos) {
+    else if (
+        request.find("POST /api/appointment") != string::npos ||
+        request.find("POST /Hospital-Management/api/appointment") != string::npos
+    ) {
         return buildHTTPResponse(handleScheduleAppointment(body));
     }
     else if (request.find("GET /api/patients") != string::npos) {
@@ -267,7 +277,6 @@ string processRequest(string request) {
     
     return buildHTTPResponse(buildResponse(false, "Endpoint not found"));
 }
-
 // Handle client connection
 void handleClient(int clientSocket) {
     char buffer[4096] = { 0 };
