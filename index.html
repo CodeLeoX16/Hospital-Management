@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏥 Hospital Management System</h1>
+            <p>Manage Patients, Doctors, and Appointments</p>
+        </header>
+
+        <nav class="navbar">
+            <button type="button" class="nav-btn active" data-tab="dashboard">Dashboard</button>
+            <button type="button" class="nav-btn" data-tab="patients">Patients</button>
+            <button type="button" class="nav-btn" data-tab="doctors">Doctors</button>
+            <button type="button" class="nav-btn" data-tab="appointments">Appointments</button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <p class="stat-number" id="patientCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Doctors</h3>
+                    <p class="stat-number" id="doctorCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Appointments</h3>
+                    <p class="stat-number" id="appointmentCount">0</p>
+                </div>
+            </div>
+            <div class="recent-section">
+                <h2>Recent Activity</h2>
+                <div id="recentActivity" class="activity-list">
+                    <p>No recent activity</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patients Tab -->
+        <section id="patients" class="tab-content">
+            <div class="section-header">
+                <h2>Manage Patients</h2>
+            </div>
+
+            <div class="form-section">
+                <h3>Add New Patient</h3>
+                <form id="patientForm" class="form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="patientName" placeholder="Enter patient name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="patientGender" title="Select patient gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" id="patientAge" placeholder="Enter age" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="patientAddress" placeholder="Enter address" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="patientPhone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="patientEmail" placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Patient</button>
+                </form>
+            </div>
+
+            <div class="list-section">
+                <h3>Patient List</h3>
+                <div id="patientList" class="data-grid">
+                    <p>No patients found</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctors Tab -->
+        <section id="doctors" class="tab-content">
+            <div class="section-header">
+                <h2>Manage Doctors</h2>
+            </div>
+
+            <div class="form-section">
+                <h3>Add New Doctor</h3>
+                <form id="doctorForm" class="form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="doctorName" placeholder="Enter doctor name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Speciality</label>
+                        <select id="doctorSpeciality" title="Select doctor speciality" required>
+                            <option value="">Select Speciality</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="General Practice">General Practice</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="doctorAddress" placeholder="Enter address" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="doctorPhone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="doctorEmail" placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Doctor</button>
+                </form>
+            </div>
+
+            <div class="list-section">
+                <h3>Doctor List</h3>
+                <div id="doctorList" class="data-grid">
+                    <p>No doctors found</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointments Tab -->
+        <section id="appointments" class="tab-content">
+            <div class="section-header">
+                <h2>Manage Appointments</h2>
+            </div>
+
+            <div class="form-section">
+                <h3>Schedule New Appointment</h3>
+                <form id="appointmentForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Select Patient</label>
+                            <select id="appointmentPatient" title="Select a patient" required>
+                                <option value="">Select Patient</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Doctor</label>
+                            <select id="appointmentDoctor" title="Select a doctor" required>
+                                <option value="">Select Doctor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="appointmentDate" title="Select appointment date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Time</label>
+                            <input type="time" id="appointmentTime" title="Select appointment time" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+                </form>
+            </div>
+
+            <div class="list-section">
+                <h3>Appointment List</h3>
+                <div id="appointmentList" class="data-grid">
+                    <p>No appointments found</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
