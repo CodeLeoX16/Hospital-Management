@@ -24,35 +24,36 @@
 
 </div>
 
-### 📱 Application Screenshots
+<h2 align="center">📸 Project Screenshots</h2>
 
-<table>
+<table align="center">
   <tr>
-    <td width="50%">
-      <h4>🏠 Dashboard Overview</h4>
-      <img width="1550" height="952" alt="Screenshot 2026-01-30 133514" src="https://github.com/user-attachments/assets/f4a05479-4925-49fa-af56-ac915947074f" />
+    <td align="center" width="50%">
+      <h3>🏠 Dashboard Overview</h3>
+      <img src="https://github.com/user-attachments/assets/f4a05479-4925-49fa-af56-ac915947074f" width="90%" />
       <p><i>Real-time statistics and activity monitoring at a glance</i></p>
     </td>
-    <td width="50%">
-      <h4>👨‍⚕️ Patient Management</h4>
-      <img width="1523" height="977" alt="Screenshot 2026-01-30 134326" src="https://github.com/user-attachments/assets/a0f7103c-2c03-4f14-8abe-8e66ebc48537" />
-
+    <td align="center" width="50%">
+      <h3>👨‍⚕️ Patient Management</h3>
+      <img src="https://github.com/user-attachments/assets/a0f7103c-2c03-4f14-8abe-8e66ebc48537" width="90%" />
       <p><i>Comprehensive patient registration and record management</i></p>
     </td>
   </tr>
+
   <tr>
-    <td width="50%">
-      <h4>Doctor Management</h4>
-      <img width="1523" height="951" alt="Screenshot 2026-01-30 134633" src="https://github.com/user-attachments/assets/7b36b5a1-df13-44c2-abec-471d24eff648" />
-      <p><i>Easy-to-use appointment booking and management</i></p>
+    <td align="center" width="50%">
+      <h3>🩺 Doctor Management</h3>
+      <img src="https://github.com/user-attachments/assets/7b36b5a1-df13-44c2-abec-471d24eff648" width="90%" />
+      <p><i>Doctor profiles and schedule management</i></p>
     </td>
-    <td width="50%">
-      <h4>Appointment Scheduling</h4>
-      <img width="1517" height="962" alt="Screenshot 2026-01-30 134355" src="https://github.com/user-attachments/assets/5321b8e6-baae-494e-ae4c-0e2fdbc57bd0" />
-      <p><i>Beautiful card-based data presentation with hover effects</i></p>
+    <td align="center" width="50%">
+      <h3>📅 Appointment Scheduling</h3>
+      <img src="https://github.com/user-attachments/assets/5321b8e6-baae-494e-ae4c-0e2fdbc57bd0" width="90%" />
+      <p><i>Easy appointment booking with clean UI</i></p>
     </td>
   </tr>
 </table>
+
 
 ---
 
